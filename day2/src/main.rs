@@ -27,10 +27,43 @@ struct Duel {
     opponent: Option<Figure>,
 }
 
+fn string_to_duel_outcome(outcome: String) -> Option<DuelOutcome> {
+    match outcome.as_str(){
+        "X" => Some(DuelOutcome::Loose),
+        "Y" => Some(DuelOutcome::Tie),
+        "Z" => Some(DuelOutcome::Win),
+        &_ => None,
+    }
+}
+
+fn player_should_make_figure(opponent: Figure, outcome: DuelOutcome) -> Figure {
+    match opponent {
+        Figure::Rock => match outcome {
+            DuelOutcome::Loose => Figure::Scissors,
+            DuelOutcome::Tie => Figure::Rock,
+            DuelOutcome::Win => Figure::Paper,
+        },
+        Figure::Paper => match outcome {
+            DuelOutcome::Loose => Figure::Rock,
+            DuelOutcome::Tie => Figure::Paper,
+            DuelOutcome::Win => Figure::Scissors,
+        },
+        Figure::Scissors => match outcome {
+            DuelOutcome::Loose => Figure::Paper,
+            DuelOutcome::Tie => Figure::Scissors,
+            DuelOutcome::Win => Figure::Rock,
+        }
+    }
+}
+
 fn parse_duel(player : &str, opponent: &str) -> Option<Duel> {
+    let opponent_figure = string_to_figure(String::from(opponent))?;
+    let wanted_outcome = string_to_duel_outcome(String::from(player))?;
+    let player_wanted_figure = player_should_make_figure(opponent_figure.clone(), wanted_outcome);
+
     Some(Duel {
-        player: string_to_figure(String::from(player)),
-        opponent: string_to_figure(String::from(opponent)),
+        player: Some(player_wanted_figure),
+        opponent: Some(opponent_figure),
     })
 }
 
