@@ -8,6 +8,7 @@ fn main() -> io::Result<()> {
     let mut reader = io::BufReader::new(file?).lines();
 
     let mut overlap_counter = 0;
+    let mut partial_overlap_counter = 0;
 
     for maybe_line in reader {
         let line =  maybe_line.unwrap();
@@ -29,6 +30,10 @@ fn main() -> io::Result<()> {
         let second = section_numbers[1].clone();
         let common = section_numbers.pop().unwrap().intersect(section_numbers.pop().unwrap());
 
+        if common.len() != 0 {
+            partial_overlap_counter+=1;
+        }
+
         if first == common {
             overlap_counter+=1;
         }else if second == common {
@@ -42,7 +47,8 @@ fn main() -> io::Result<()> {
     let mut score = 0;
 
 
-    println!("Final: {}", overlap_counter);
+    println!("Overlap counter: {}", overlap_counter);
+    println!("Partial overlap counter: {}", partial_overlap_counter);
 
     Ok(())
 }
