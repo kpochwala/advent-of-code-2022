@@ -42,9 +42,17 @@ pub trait Commandable {
 
 impl Commandable for Input {
     fn command(&mut self, command: Command) -> () {
-        for n in 0..command.how_many{
+        let containers = self.dock_map.get_mut(&command.from).unwrap();
+
+        let mut buffer = VecDeque::new();
+
+        for _n in 0..command.how_many{
             let container = self.dock_map.get_mut(&command.from).unwrap().pop_front().unwrap();
-            self.dock_map.get_mut(&command.to).unwrap().push_front(container);
+            buffer.push_front(container);
+        }
+
+        for container in buffer.iter() {
+            self.dock_map.get_mut(&command.to).unwrap().push_front(container.clone());
         }
     }
 }
