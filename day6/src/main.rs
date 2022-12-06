@@ -15,7 +15,7 @@ fn main() -> std::io::Result<()> {
     File::open("src/input")?.read_to_string(&mut input);
     let iter = input.as_bytes().to_vec();
 
-    let window_size = 4;
+    let window_size = 14;
 
     println!("Input: {:?}", input);
     let mut counter = window_size;
