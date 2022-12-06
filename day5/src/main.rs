@@ -115,7 +115,7 @@ impl Parseable for Input {
 }
 
 fn main()  -> io::Result<()> {
-    let file = File::open("src/test_input");
+    let file = File::open("src/input");
     let reader = io::BufReader::new(file?).lines();
 
     let mut input = Input::new();
@@ -133,6 +133,14 @@ fn main()  -> io::Result<()> {
     }
 
     println!("Final dock map: {:?}", input.dock_map);
+
+    for id in input.stack_ids{
+        // println!("stack id: {}", id);
+        let mut txt = input.dock_map.get_mut(&id).unwrap().pop_front().unwrap();
+        txt = txt.replace("[", "");
+        txt = txt.replace("]", "");
+        print!("{}", txt);
+    }
 
     Ok(())
 }
